@@ -1,8 +1,13 @@
 <?php
 
 namespace Database\Seeders;
-
+use Illuminate\Support\Facades\Hash;
+use App\Models\Genre;
 use App\Models\User;
+use App\Models\Game;
+use App\Models\Comment;
+use App\Models\TesterReview;
+use App\Models\GameGenre;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            UsersTableSeeder::class,
+            GamesTableSeeder::class,
+            CommentsTableSeeder::class,
+            TesterReviewsTableSeeder::class,
+            GenresTableSeeder::class,
+            GameGenresTableSeeder::class,
         ]);
+
     }
 }
