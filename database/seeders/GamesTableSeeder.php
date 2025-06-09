@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 use App\Models\Game;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class GamesTableSeeder extends Seeder
@@ -14,6 +13,7 @@ class GamesTableSeeder extends Seeder
     {
         Game::create([
             'name' => 'Space Battle',
+            'description' => 'Fight epic cosmic battles in this space exploration RPG!',
             'game_link' => 'http://example.com/spacebattle',
             'submitted_on' => now(),
             'admin_approved' => true,
@@ -23,6 +23,7 @@ class GamesTableSeeder extends Seeder
 
         Game::create([
             'name' => 'Jungle Run',
+            'description' => 'This is totally not a temple run knock off',
             'game_link' => 'http://example.com/junglerun',
             'submitted_on' => now(),
             'admin_approved' => false,
@@ -32,6 +33,7 @@ class GamesTableSeeder extends Seeder
 
         Game::create([
             'name' => 'Craft Mine',
+            'description' => 'I. AM STEVE. CHICKEN JOCKEY!!! LALALALAVA, CHICHICHIHCICKEN.',
             'game_link' => 'http://example.com/craftmine',
             'submitted_on' => now(),
             'admin_approved' => false,

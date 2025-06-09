@@ -11,6 +11,7 @@ class Game extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'game_link',
         'submitted_on',
         'admin_approved',
