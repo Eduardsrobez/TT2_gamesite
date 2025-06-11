@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Game;
+use App\Policies\GamePolicy;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -15,9 +17,9 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    protected $policies = [
+        Game::class => GamePolicy::class,
+    ];
     public function boot(): void
     {
         // Disable foreign key checks for MySQL

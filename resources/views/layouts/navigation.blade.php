@@ -16,6 +16,15 @@
                         Games
                     </x-nav-link>
                 </div>
+                @auth
+                    @if(auth()->user()->isAdmin() || auth()->user()->isDeveloper())
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <x-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
+                                New post
+                            </x-nav-link>
+                        </div>
+                    @endif
+                @endauth
             </div>
 
             <!-- Settings Dropdown -->
@@ -68,8 +77,15 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('gamelist.show')" :active="request()->routeIs('gamelist.show')">
-                {{ __('gamelist.show') }}
+                {{ __('Games') }}
             </x-responsive-nav-link>
+            @auth
+                @if(auth()->user()->isAdmin() || auth()->user()->isDeveloper())
+            <x-responsive-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
+                {{ __('New Post') }}
+            </x-responsive-nav-link>
+                @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

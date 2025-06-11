@@ -28,16 +28,17 @@
         @endif
 
         <!-- Description - better readability -->
-        <p class="text-gray-300 text-base mb-4 line-clamp-3">
-            {{ $game->description ?? 'Description coming soon' }}
+        <p class="text-gray-300 text-base mb-4 break-words">
+            {{ Str::limit($game->description ?? 'Description coming soon', 120, '...') }}
         </p>
 
         <!-- Action buttons -->
         <div class="mt-auto flex justify-between items-center">
             <span class="text-yellow-400 text-sm">★★★★☆</span>
-            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
+            <a href="{{ route('games.details', $game->id) }}"
+               class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
                 Details
-            </button>
+            </a>
         </div>
     </div>
 </div>

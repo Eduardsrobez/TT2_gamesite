@@ -34,6 +34,15 @@ class User extends Authenticatable
 
     public function testerReviews()
     {
-        return $this->hasMany(Tester_review::class);
+        return $this->hasMany(TesterReview::class);
+    }
+    public function isDeveloper(): bool
+    {
+        return $this->role === 'Game-Developer';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
