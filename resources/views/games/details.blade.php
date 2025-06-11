@@ -20,16 +20,11 @@
 
                 <!-- Content Section - Takes remaining 2/3 -->
                 <div class="w-full md:w-2/3 p-6">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $game->name }}</h1>
-                            <p class="text-gray-600 dark:text-gray-300 mt-2">
-                                Created by {{ $game->user->name }}
-                            </p>
-                        </div>
-                        @if(auth()->id() === $game->user_id || auth()->user()->isAdmin())
-                            <x-secondary-button>Edit</x-secondary-button>
-                        @endif
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $game->name }}</h1>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Created by {{ $game->user->name }}
+                        </p>
                     </div>
 
                     <!-- Genres -->
@@ -42,7 +37,7 @@
                     </div>
 
                     <!-- Play Button -->
-                    <div class="mt-6">
+                    <div class="mt-6 mb-8">
                         <a href="{{ $game->game_link }}" target="_blank"
                            class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 border border-gray-300 rounded-md text-white font-semibold transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,6 +47,20 @@
                             Play Game
                         </a>
                     </div>
+
+                    <!-- Ratings -->
+                    <div class="mt-8">
+                        <x-rating-display :game="$game"/>
+                    </div>
+
+                    <!-- Edit Button -->
+                    @if(auth()->id() === $game->user_id || auth()->user()->isAdmin())
+                        <div class="mt-6">
+                            <a href="{{ route('games.edit', $game) }}">
+                                <x-secondary-button>Edit</x-secondary-button>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -81,8 +90,7 @@
                         </div>
                     </div>
                 </div>
-
-                </div>
             </div>
         </div>
+    </div>
 </x-app-layout>

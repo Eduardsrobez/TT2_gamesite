@@ -20,7 +20,6 @@ class GameController extends Controller
             });
         }
 
-        // Keep existing search/sort
         if ($search = $request->input('search')) {
             $query->where('name', 'like', "%$search%");
         }
@@ -92,5 +91,38 @@ class GameController extends Controller
         $game->genres()->attach($request->genres);
 
         return redirect()->route('gamelist.show', $game)->with('success', 'Game posted successfully!');
+    }
+    public function edit(Game $game)
+    {
+        $genres = Genre::all();
+        return view('games.edit', compact('game', 'genres'));
+    }
+
+    public function update(Request $request, Game $game)
+    {
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'game_link' => 'required|url',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:genres,id',
+            'cover_image' => 'nullable|image|max:2048',
+        ]);
+
+        $game->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'game_link' => $validated['game_link'],
+        ]);
+
+        if ($request->hasFile('cover_image')) {
+            $game->cover_image = $request->file('cover_image')->store('game_covers', 'public');
+            $game->save();
+        }
+
+        $game->genres()->sync($validated['genres']);
+
+        return redirect()->route('games.details', $game)->with('success', 'Game updated successfully.');
     }
 }

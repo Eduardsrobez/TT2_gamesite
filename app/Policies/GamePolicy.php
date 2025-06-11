@@ -12,4 +12,8 @@ class GamePolicy
     {
         return $user->isAdmin() || $user->isDeveloper();
     }
+    public function update(User $user, Game $game)
+    {
+        return $user->id === $game->user_id || $user->isAdmin();
+    }
 }
