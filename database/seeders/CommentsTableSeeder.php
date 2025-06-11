@@ -25,5 +25,12 @@ class CommentsTableSeeder extends Seeder
             'user_id' => 3,
             'game_id' => 2,
         ]);
+
+        Comment::create([
+            'comment' => 'Really enjoyed this',
+            'rating' => 4,
+            'user_id' => 3,
+            'game_id' => 1,
+        ]);
     }
 }

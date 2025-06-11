@@ -12,24 +12,56 @@ class GameController extends Controller
 {
     public function show(Request $request)
     {
-        $games = Game::with('genres')
-            ->when($request->genre, function ($query, $genreId) {
-                $query->whereHas('genres', fn($q) => $q->where('id', $genreId));
-            })
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%$search%");
-            })
-            ->when($request->sort === 'title', function ($query) {
-                $query->orderBy('name');
-            })
+        $query = Game::with('genres');
+
+        if ($request->has('genre')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->where('genres.id', $request->genre);
+            });
+        }
+
+        // Keep existing search/sort
+        if ($search = $request->input('search')) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        if ($sort = $request->input('sort')) {
+            switch ($sort) {
+                case 'title_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'title_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                case 'rating':
+                    $query->withAvg('comments', 'rating')
+                        ->orderByDesc('comments_avg_rating');
+                    break;
+                default:
+                    $query->latest('created_at');
+            }
+        }
+
+        $query->latest('created_at');
+        $games = $query->get();
+
+        $genres = Genre::select('genres.*')
+            ->selectSub(function ($query) {
+                $query->from('game_genres')
+                    ->whereColumn('game_genres.genre_id', 'genres.id')
+                    ->selectRaw('COUNT(*)');
+            }, 'games_count')
             ->get();
 
         return view('gamelist', [
             'games' => $games,
-            'genres' => Genre::all(),
-            'currentGenre' => $request->genre
+            'genres' => $genres,
+            'currentGenre' => $request->genre,
+            'currentSort' => $request->sort,
+            'currentSearch' => $request->search
         ]);
     }
+
     public function view(Game $game)
     {
         // Eager load relationships

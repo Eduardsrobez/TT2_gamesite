@@ -35,10 +35,15 @@
         <!-- Main Content -->
         <section class="flex-1">
             <!-- Search and Sort -->
-            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-                <x-search-bar />
-                <x-sort-games />
-            </div>
+            <form method="GET" action="{{ route('gamelist.show') }}">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                    <x-search-bar />
+                    <x-sort-games />
+                </div>
+                @if(request('genre'))
+                <input type="hidden" name="genre" value="{{ request('genre') }}">
+                @endif     
+            </form>
 
             <!-- Game Cards -->
             <div class="grid gap-6">
