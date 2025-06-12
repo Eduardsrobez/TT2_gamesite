@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 use App\Models\Game;
+use App\Models\User;
+use App\Policies\UserPolicy;
 use App\Policies\GamePolicy;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected $policies = [
         Game::class => GamePolicy::class,
+        User::class => UserPolicy::class,
     ];
     public function boot(): void
     {

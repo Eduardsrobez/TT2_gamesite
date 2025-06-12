@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,6 +13,11 @@ Route::get('/', function () {
 Route::middleware(['auth', 'can:create,App\Models\Game'])->group(function () {
     Route::get('/gamelist/create', [GameController::class, 'create'])->name('games.create');
     Route::post('/gamelist', [GameController::class, 'store'])->name('games.store');
+});
+Route::middleware(['auth', 'can:viewAdminDashboard,App\Models\User'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::put('/admin/users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
+    Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/gamelist', [GameController::class, 'show'])->name('gamelist.show');

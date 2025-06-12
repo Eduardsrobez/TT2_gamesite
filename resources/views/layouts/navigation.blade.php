@@ -24,6 +24,13 @@
                             </x-nav-link>
                         </div>
                     @endif
+                        @can('viewAdminDashboard', \App\Models\User::class)
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                    Dashboard
+                                </x-nav-link>
+                            </div>
+                        @endcan
                 @endauth
             </div>
 
