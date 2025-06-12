@@ -32,7 +32,24 @@
                 </div>
                 @if(request('genre'))
                 <input type="hidden" name="genre" value="{{ request('genre') }}">
-                @endif     
+                @endif
+                
+                @if(auth()->user()->isAdmin())
+                <div class="mb-4 p-3 bg-gray-800 rounded-lg">
+                    <form method="GET" class="flex items-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="unapproved" @checked(request('unapproved')) onChange="this.form.submit()"
+                                class="rounded h-5 w-5 text-blue-600">
+                            <span class="ml-2 text-white">Show unapproved only</span>
+                        </label>
+                
+                        <!-- Preserve other filters -->
+                        @foreach(request()->except('unapproved') as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endforeach
+                    </form>
+                </div>
+                @endif
             </form>
 
             <!-- Game Cards -->

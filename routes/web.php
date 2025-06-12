@@ -12,6 +12,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'can:create,App\Models\Game'])->group(function () {
     Route::get('/gamelist/create', [GameController::class, 'create'])->name('games.create');
     Route::post('/gamelist', [GameController::class, 'store'])->name('games.store');
+    Route::patch('/games/{game}/approve', [GameController::class, 'approve'])->name('games.approve');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/gamelist', [GameController::class, 'show'])->name('gamelist.show');

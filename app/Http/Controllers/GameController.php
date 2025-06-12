@@ -12,8 +12,11 @@ class GameController extends Controller
 {
     public function show(Request $request)
     {
-        $query = Game::with('genres')
-            ->where('admin_approved', true);
+        $query = Game::with('genres');
+
+        if ($request->has('unapproved')) {
+            $query->where('admin_approved', false);
+        } else $query->where('admin_approved', true);
 
         if ($request->has('genre')) {
             $query->whereHas('genres', function ($q) use ($request) {
@@ -61,6 +64,12 @@ class GameController extends Controller
             'currentSort' => $request->sort,
             'currentSearch' => $request->search
         ]);
+    }
+
+    public function approve(Game $game)
+    {
+        $game->update(['admin_approved' => true]);
+        return back()->with('success', 'Game approved successfully!');
     }
 
     public function view(Game $game)

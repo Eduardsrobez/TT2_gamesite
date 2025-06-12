@@ -16,4 +16,8 @@ class GamePolicy
     {
         return $user->id === $game->user_id || $user->isAdmin();
     }
+    public function approve(User $user, Game $game)
+    {
+        return $user->isAdmin();
+    }
 }

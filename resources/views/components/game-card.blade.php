@@ -15,7 +15,19 @@
     <div class="p-4 flex-1 flex flex-col overflow-hidden">
 
         <!-- Game title -->
-        <h3 class="text-xl font-bold text-white mb-2 truncate">{{ $game->name }}</h3>
+        <div class="mt-auto flex justify-between items-center">
+            <h3 class="text-xl font-bold text-white mb-2 truncate">{{ $game->name }}</h3>
+
+            @if(!$game->admin_approved)
+            <form action="{{ route('games.approve', $game) }}" method="POST" class="inline">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                    Approve
+                </button>
+            </form>
+            @endif
+        </div>
 
         <!-- Genres -->
         @if($game->genres->isNotEmpty())
@@ -29,7 +41,7 @@
         @endif
 
         <!-- Description -->
-        <p class="text-gray-300 text-base mb-4 break-words">
+        <p class="text-gray-300 text-base break-words line-clamp-2">
             {{ Str::limit($game->description ?? 'Description coming soon', 120, '...') }}
         </p>
 
@@ -42,7 +54,8 @@
             </a>
         </div>
 
-        <p class="text-gray-300 text-base" style="opacity: 0.3"> {{ $game->submitted_on }} </p>
+
+        <p class="text-gray-300 text-base text-sm" style="opacity: 0.3"> {{ $game->submitted_on }} </p>
     </div>
 </div>
 
