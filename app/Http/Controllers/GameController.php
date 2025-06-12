@@ -12,7 +12,8 @@ class GameController extends Controller
 {
     public function show(Request $request)
     {
-        $query = Game::with('genres');
+        $query = Game::with('genres')
+            ->where('admin_approved', true);
 
         if ($request->has('genre')) {
             $query->whereHas('genres', function ($q) use ($request) {
@@ -39,15 +40,16 @@ class GameController extends Controller
                 default:
                     $query->latest('created_at');
             }
-        }
+        } else $query->latest('created_at');
 
-        $query->latest('created_at');
         $games = $query->get();
 
         $genres = Genre::select('genres.*')
             ->selectSub(function ($query) {
                 $query->from('game_genres')
+                    ->join('games', 'game_genres.game_id', '=', 'games.id')
                     ->whereColumn('game_genres.genre_id', 'genres.id')
+                    ->where('games.admin_approved', true)  // Only count approved games
                     ->selectRaw('COUNT(*)');
             }, 'games_count')
             ->get();
