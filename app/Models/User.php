@@ -40,9 +40,16 @@ class User extends Authenticatable
     {
         return $this->role === 'Game-Developer';
     }
-
+    public function isTester(): bool
+    {
+        return $this->role === 'tester';
+    }
+    public function isRoot(): bool
+    {
+        return $this->role === 'root';
+    }
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === 'admin' || $this->role === 'root';
     }
 }

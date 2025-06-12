@@ -20,4 +20,7 @@ class GamePolicy
     {
         return $user->isAdmin();
     }
+    public function destroy(User $user, Game $game){
+        return $user->id === $game->user_id || $user->isAdmin();
+    }
 }

@@ -88,21 +88,31 @@ class GameController extends Controller
 
     public function store(StoreGameRequest $request)
     {
-        $path = $request->file('cover_image')->store('game_covers', 'public');
+        $user = auth()->user();
+
+        $path = $request->hasFile('cover_image')
+            ? $request->file('cover_image')->store('game_covers', 'public')
+            : null;
 
         $game = Game::create([
             'name' => $request->name,
             'description' => $request->description,
             'game_link' => $request->game_link,
             'cover_image' => $path,
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'submitted_on' => now(),
+            'admin_approved' => $user->isAdmin(),
         ]);
 
         $game->genres()->attach($request->genres);
-
-        return redirect()->route('gamelist.show', $game)->with('success', 'Game posted successfully!');
+        if ($user->isAdmin()) {
+            return redirect()->route('gamelist.show', $game)->with('success', 'Game posted successfully!');
+        }
+        else {
+            return redirect()->route('gamelist.show', $game)->with('success', 'Game posted, waiting for approval!');
+        }
     }
+
     public function edit(Game $game)
     {
         $genres = Genre::all();
@@ -111,7 +121,6 @@ class GameController extends Controller
 
     public function update(Request $request, Game $game)
     {
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -128,6 +137,9 @@ class GameController extends Controller
         ]);
 
         if ($request->hasFile('cover_image')) {
+            if ($game->cover_image && Storage::disk('public')->exists($game->cover_image)) {
+                Storage::disk('public')->delete($game->cover_image);
+            }
             $game->cover_image = $request->file('cover_image')->store('game_covers', 'public');
             $game->save();
         }
@@ -136,4 +148,16 @@ class GameController extends Controller
 
         return redirect()->route('games.details', $game)->with('success', 'Game updated successfully.');
     }
+
+    public function destroy(Game $game)
+    {
+        if ($game->cover_image && \Storage::disk('public')->exists($game->cover_image)) {
+            \Storage::disk('public')->delete($game->cover_image);
+        }
+
+        $game->delete();
+
+        return redirect()->route('gamelist.show')->with('success', 'Game post deleted successfully!');
+    }
+
 }
