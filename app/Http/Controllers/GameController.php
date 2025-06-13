@@ -75,8 +75,7 @@ class GameController extends Controller
     public function view(Game $game)
     {
         // Eager load relationships
-        $game->load('user', 'genres');
-
+        $game->load(['genres', 'comments.user']);
         return view('games.details', compact('game'));
     }
 

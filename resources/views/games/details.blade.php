@@ -113,6 +113,7 @@
                     </div>
                 </div>
             @endif
+            <x-comments :game="$game" />
 
         </div>
     </div>

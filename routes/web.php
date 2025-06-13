@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
@@ -30,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/gamelist/{game}', [GameController::class, 'update'])->middleware('can:update,game')->name('games.update');
 
     Route::delete('/gamelist/{game}', [GameController::class, 'destroy'])->middleware('can:destroy,game')->name('games.destroy');
+
+    Route::post('/games/{game}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
