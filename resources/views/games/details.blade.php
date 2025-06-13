@@ -23,7 +23,7 @@
                     <div>
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $game->name }}</h1>
                         <p class="text-gray-600 dark:text-gray-300 mt-2">
-                            Created by {{ $game->user->name }}
+                            Created by {{ $game->user?->name ?? 'Deleted User' }}
                         </p>
                     </div>
 
@@ -89,7 +89,7 @@
                     <div class="space-y-3">
                         <div>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Developer</p>
-                            <p class="text-gray-900 dark:text-white">{{ $game->user->name }}</p>
+                            <p class="text-gray-900 dark:text-white">{{ $game->user?->name ?? 'Deleted User' }}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Posted On</p>

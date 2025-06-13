@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('gamelist.show');
+    }
     return view('welcome');
 });
 

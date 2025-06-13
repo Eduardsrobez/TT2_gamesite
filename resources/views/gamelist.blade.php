@@ -54,9 +54,13 @@
 
             <!-- Game Cards -->
             <div class="grid gap-6">
-                @foreach($games as $game)
+                @forelse($games as $game)
                     <x-game-card :game="$game" />
-                @endforeach
+                @empty
+                    <div class="text-center text-gray-400 text-xl mt-16 font-semibold">
+                        🎮 No games available.
+                    </div>
+                @endforelse
             </div>
         </section>
     </div>

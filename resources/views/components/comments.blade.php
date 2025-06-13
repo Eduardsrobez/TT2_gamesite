@@ -46,7 +46,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">
-                        {{ $comment->user->name }}
+                        {{ $comment->user->name ?? 'Deleted User'}}
                     </h4>
                     <div class="flex items-center mt-1">
                         @for($i = 1; $i <= 5; $i++) @if($i <=$comment->rating)
