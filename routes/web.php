@@ -5,6 +5,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TesterReviewController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -37,6 +38,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/games/{game}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::post('/gamelist/{game}/tester-reviews', [TesterReviewController::class, 'store'])->name('tester-reviews.store');
+    Route::delete('/tester-reviews/{testerReview}', [TesterReviewController::class, 'destroy'])->name('tester-reviews.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

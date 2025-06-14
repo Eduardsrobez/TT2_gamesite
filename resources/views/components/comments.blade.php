@@ -68,7 +68,7 @@
                 </span>
             </div>
 
-            <p class="mt-2 text-gray-700 dark:text-gray-300">
+            <p class="mt-2 text-gray-700 dark:text-gray-300 break-words whitespace-pre-wrap">
                 {{ $comment->comment }}
             </p>
 
