@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\AuditLogger;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,6 +34,11 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        AuditLogger::log(
+            'Update Profile',
+            "User ID " . Auth::id() . " updated their profile"
+        );
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -47,6 +52,12 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+        $userId = $user->id;
+
+        AuditLogger::log(
+            'Delete Account',
+            "User ID {$userId} deleted their account"
+        );
 
         Auth::logout();
 

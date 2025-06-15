@@ -3,7 +3,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="text-2xl font-bold mb-6">User Management</h1>
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-bold">User Management</h1>
+                        <a href="{{ route('admin.audit-logs.export') }}">
+                            <x-primary-button>
+                                Download Audit Logs (.txt)
+                            </x-primary-button>
+                        </a>
+                    </div>
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">

@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Comment;
 use App\Models\Game;
 use App\Models\User;
+use App\Policies\CommentPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\GamePolicy;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     protected $policies = [
         Game::class => GamePolicy::class,
         User::class => UserPolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
     public function boot(): void
     {

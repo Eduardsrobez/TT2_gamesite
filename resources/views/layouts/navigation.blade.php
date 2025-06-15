@@ -88,10 +88,15 @@
             </x-responsive-nav-link>
             @auth
                 @if(auth()->user()->isAdmin() || auth()->user()->isDeveloper())
-            <x-responsive-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
-                {{ __('New Post') }}
-            </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('games.create')" :active="request()->routeIs('games.create')">
+                            New post
+                        </x-responsive-nav-link>
                 @endif
+                @can('viewAdminDashboard', \App\Models\User::class)
+                        <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            Dashboard
+                        </x-responsive-nav-link>
+                @endcan
             @endauth
         </div>
 

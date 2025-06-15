@@ -5,6 +5,8 @@ use App\Models\Game;
 use App\Models\Genre;
 use App\Models\GameGenre;
 use Illuminate\Http\Request;
+use App\Services\AuditLogger;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreGameRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
@@ -69,12 +71,17 @@ class GameController extends Controller
     public function approve(Game $game)
     {
         $game->update(['admin_approved' => true]);
+
+        AuditLogger::log(
+            'Approve Game',
+            "User ID " . Auth::id() . " approved game ID {$game->id}"
+        );
+
         return back()->with('success', 'Game approved successfully!');
     }
 
     public function view(Game $game)
     {
-        // Eager load relationships
         $game->load(['genres', 'comments.user']);
         return view('games.details', compact('game'));
     }
@@ -104,6 +111,13 @@ class GameController extends Controller
         ]);
 
         $game->genres()->attach($request->genres);
+
+        // Log the game creation
+        AuditLogger::log(
+            'Create Game',
+            "User ID " . $user->id . " created game ID {$game->id} with name '{$game->name}'"
+        );
+
         if ($user->isAdmin()) {
             return redirect()->route('gamelist.show', $game)->with('success', 'Game posted successfully!');
         }
@@ -145,16 +159,30 @@ class GameController extends Controller
 
         $game->genres()->sync($validated['genres']);
 
+        // Log the update action
+        AuditLogger::log(
+            'Update Game',
+            "User ID " . Auth::id() . " updated game ID {$game->id} with name '{$game->name}'"
+        );
+
         return redirect()->route('games.details', $game)->with('success', 'Game updated successfully.');
     }
 
     public function destroy(Game $game)
     {
-        if ($game->cover_image && \Storage::disk('public')->exists($game->cover_image)) {
-            \Storage::disk('public')->delete($game->cover_image);
+        $gameId = $game->id;
+        $gameName = $game->name;
+
+        if ($game->cover_image && Storage::disk('public')->exists($game->cover_image)) {
+            Storage::disk('public')->delete($game->cover_image);
         }
 
         $game->delete();
+
+        AuditLogger::log(
+            'Delete Game',
+            "User ID " . Auth::id() . " deleted game ID {$gameId} with name '{$gameName}'"
+        );
 
         return redirect()->route('gamelist.show')->with('success', 'Game post deleted successfully!');
     }

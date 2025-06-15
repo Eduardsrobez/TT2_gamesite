@@ -23,6 +23,7 @@ Route::middleware(['auth', 'can:viewAdminDashboard,App\Models\User'])->group(fun
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::put('/admin/users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
     Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('/admin/audit-logs/export', [AdminController::class, 'exportAuditLogs'])->name('admin.audit-logs.export');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/gamelist', [GameController::class, 'show'])->name('gamelist.show');

@@ -15,6 +15,12 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate([
+            'name' => 'Root User',
+            'email' => 'root@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'root',
+        ]);
+        User::firstOrCreate([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
